@@ -1,0 +1,6 @@
+arquivo_entrada = input_file.sub
+arquivo_saida = output_file.sub
+tempo_inicial = 5907
+tempo_inicial_correto = 4740
+tempo_final = 240782
+tempo_final_correto = 192650

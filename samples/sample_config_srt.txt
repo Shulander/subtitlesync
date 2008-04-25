@@ -1,0 +1,7 @@
+arquivo_entrada = input_file.srt
+arquivo_saida = output_file.srt
+tempo_inicial = 00:00:00,000
+tempo_inicial_correto = 00:00:00,000
+tempo_final = 01:00:00,000
+tempo_final_correto = 01:00:00,000
+contador = 0
