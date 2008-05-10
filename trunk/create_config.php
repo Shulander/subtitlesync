@@ -1,27 +1,5 @@
 <?php
-function estanciaLegenda($theFileName) {
-	if (strpos($theFileName, ".srt", 1)>0) {		
-		require_once("legenda1.php");
-		return new Legenda1();
-	} else {	
-		echo "error: it just support .srt subtitles";
-		exit(0);
-	}
-}
-
-function strFormat($theStr, $theLenght) {
-	if (strlen($theStr)>$theLenght) {
-		return substr($theStr, 0, $theLenght);
-	} else {
-		return str_pad($theStr, $theLenght);
-	}
-}
-
-function readline( $prompt = '' )
-{
-    echo $prompt;
-    return rtrim( fgets( STDIN ), "\n" );
-}
+require_once(dirname( $argv[0] )."/includes/utils.php");
 
 if(count($argv)!=3 || !is_file($argv[1]) || !is_file($argv[2])){
 	echo "[error]\n";
@@ -56,7 +34,7 @@ $aEntradaInicio1-=1;
 do {
 	$aEntradaInicio2 = readline("The correct input line (2): ");
 	$aEntradaInicio2 += 0;
-}while($aEntradaInicio2<1 && $aEntradaInicio1>=10);
+}while($aEntradaInicio2<1/* && $aEntradaInicio1>=10*/);
 $aEntradaInicio2-=1;
 
 for($i=10; $i>0; $i--) {
@@ -75,7 +53,7 @@ do {
 do {
 	$aEntradaFinal2 = readline("The correct input line (4): ");
 	$aEntradaFinal2 += 0;
-}while($aEntradaFinal2<($nElementos2-$i) && $aEntradaFinal2>=$nElementos2);
+}while(/*$aEntradaFinal2<($nElementos2-$i) && */$aEntradaFinal2>=$nElementos2);
 
 $aFileConfig = "arquivo_entrada = ".$argv[2]."
 arquivo_saida = ".$argv[2]."
