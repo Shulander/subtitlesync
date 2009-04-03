@@ -10,19 +10,15 @@ if(count($argv)!=2 || !is_file($argv[1])){
 
 $aFileConfig = "arquivo_entrada = ".$argv[1]."
 arquivo_saida = ".$argv[1]."
-tempo_inicial = 00:01:10,465
-tempo_inicial_correto = 00:01:10,465
-tempo_final = 00:02:10,465
-tempo_final_correto = 00:02:10,465";
+tempo_inicial = 00:00:00,00
+tempo_inicial_correto = 00:00:00,00
+tempo_final = 01:00:00,00
+tempo_final_correto = 01:00:00,00";
 
 file_put_contents("config_creator.txt", $aFileConfig);
 
-$aAnswer = readline("Do you want to auto syncronize the subtitle (y/n)?");
-$aAnswer = trim($aAnswer);
-if($aAnswer == 'y' || $aAnswer == 'Y') {
-	exec("php ".dirname( $argv[0] )."\legenda.php 1 config_creator.txt", $aResultado);
-	echo "your new subtitle is now ready to use. enjoy it ;)\n";
-	unlink("config_creator.txt");
-}
+exec("php ".dirname( $argv[0] )."\legenda.php 1 config_creator.txt", $aResultado);
+echo "your new subtitle is now ready to use. enjoy it ;)\n";
+unlink("config_creator.txt");
 
 ?>

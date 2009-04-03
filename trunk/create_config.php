@@ -17,7 +17,7 @@ $aArquivo2 = $aFile2->abreArquivo($argv[2]);
 $nElementos1 = count($aArquivo1);
 $nElementos2 = count($aArquivo2);
 
-for($i=0; $i<10; $i++) {
+for($i=0; $i<20; $i++) {
 	$aStr1 = ($i+1)." - ".$aArquivo1[$i][2];
 	$aStr2 = ($i+1)." - ".$aArquivo2[$i][2];
 	echo sprintf("%s |-| %s\n", strFormat($aStr1, 35), strFormat($aStr2, 35));
@@ -37,7 +37,7 @@ do {
 }while($aEntradaInicio2<1/* && $aEntradaInicio1>=10*/);
 $aEntradaInicio2-=1;
 
-for($i=10; $i>0; $i--) {
+for($i=20; $i>0; $i--) {
 	$aStr1 = ($nElementos1-$i)." - ".$aArquivo1[$nElementos1-$i][2];
 	$aStr2 = ($nElementos2-$i)." - ".$aArquivo2[$nElementos2-$i][2];
 	echo sprintf("%s |-| %s\n", strFormat($aStr1, 35), strFormat($aStr2, 35));
