@@ -34,6 +34,9 @@ function criaComandosExecucao($aFilesReadyToCreate) {
 	if(!is_array($aFilesReadyToCreate) || count($aFilesReadyToCreate)==0) { return $aRetorno; }
 
 	foreach( $aFilesReadyToCreate as  $key=>$aFilename) {
+		// descobre o nome do arquivo sem a extensao
+		$aFiletipe = substr($aFilename, -3);
+		$aFilename = substr($aFilename, 0, -3);
 		// comando e arquivo de saida
 		if($pos = strrpos($aFilename, "-")) { 
 			$newFilename = substr($aFilename, 0, $pos)."."; 
@@ -54,13 +57,13 @@ function criaComandosExecucao($aFilesReadyToCreate) {
 		
 		$cmd = '"mkvmerge" -o "'.$basedir."../".$newFilename.'mkv"';
 		// faixa padrao de audio
-		$cmd .= ' --language 1:eng --default-track 1:yes -a 1 -d 0 -S "'.$aFilename.'avi"';
-
+		$cmd .= ' --language 1:eng --default-track 1:yes  --language 2:eng --default-track 2:yes "'.$aFilename.$aFiletipe.'"';
+//"--default-track" "1:yes" "--forced-track" "1:no" "--language" "2:eng" "--default-track" "2:yes" "--forced-track" "2:no" "-a" "1" "-d" "2" "-S" "-T" "--no-global-tags" "--no-chapters" "D:\\Filmes\\The.Big.Bang.Theory\\the.big.bang.theory.s03e04.720p.hdtv.x264-ctu.mkv" "--language" "0:por" "--default-track" "0:yes" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--no-global-tags" "--no-chapters" "D:\\Filmes\\The.Big.Bang.Theory\\the.big.bang.theory.s03e04.720p.hdtv.x264-ctu.pob.srt" "--language" "0:eng" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--no-global-tags" "--no-chapters" "D:\\Filmes\\The.Big.Bang.Theory\\the.big.bang.theory.s03e04.720p.hdtv.x264-ctu.eng.srt" "--track-order" "0:1,0:2,1:0,2:0"
 		// linguagens
 		foreach($aLinguagens as $key=>$val) {
 			$cmd .= ' --language 0:'.$aTraducaoLang[$val].' '.($aDefaultLang==$val?' --default-track 0:yes':'').' -s 0 -D -A "'.$aFilename.$val.'.srt"';
 		}
-		$cmd .= ' --track-order 0:0,0:1,1:0,2:0';
+//		$cmd .= ' --track-order 0:0,0:1,1:0,2:0';
 		$cmd .= "\npause";
 		$aRetorno[] = $cmd;
 		echo $cmd."\n\n";
@@ -76,7 +79,7 @@ function buscaArquivosCriar($diretorio) {
 		while (($file = readdir($dh)) !== false) {
 			if($file=='.' || $file=='..'){
 				
-			} else if(($posicao = strpos($file, ".avi")) !== false) {
+			} else if(($posicao = strpos($file, ".avi")) !== false || ($posicao = strpos($file, ".mkv")) !== false ) {
 				// descobre o nome do arquivo sem a extensao
 				$aFilename = substr($file, 0, -3);
 				// procura as legendas
@@ -87,7 +90,7 @@ function buscaArquivosCriar($diretorio) {
 				
 				// caso tenha todas as legendas salva o nome do arquivo
 				if($aPronto) {
-					$aRetorno[] = $diretorio.$aFilename;
+					$aRetorno[] = $diretorio.$file;
 				}
 			} else if(is_dir($diretorio.$file)===true){
 				$aRetorno = array_merge($aRetorno, buscaArquivosCriar($diretorio.$file."/"));
