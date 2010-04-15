@@ -64,7 +64,7 @@ function criaComandosExecucao($aFilesReadyToCreate) {
 			$cmd .= ' --language 0:'.$aTraducaoLang[$val].' '.($aDefaultLang==$val?' --default-track 0:yes':'').' -s 0 -D -A "'.$aFilename.$val.'.srt"';
 		}
 //		$cmd .= ' --track-order 0:0,0:1,1:0,2:0';
-		$cmd .= "\npause";
+//		$cmd .= "\npause";
 		$aRetorno[] = $cmd;
 		echo $cmd."\n\n";
 	}
@@ -102,6 +102,37 @@ function buscaArquivosCriar($diretorio) {
 	return $aRetorno;
 }
 
+function fixSubtitlesNames($diretorio) {
+	global $aLinguagens;
+
+	$aRenames = array();
+	if ($dh = opendir($diretorio)) {
+		while (($file = readdir($dh)) !== false) {
+			if($file=='.' || $file=='..'){
+				
+			} else if(($posicao = strpos($file, ".srt")) !== false) {
+				// descobre o nome do arquivo sem a extensao
+				$aFilename = substr($file, 0, -3);
+				// procura as legendas
+				$aPronto = true;
+				foreach($aLinguagens as $key=>$val) {
+					if(($posInicial = strpos($file,  $val."("))!==false && ($posFinal = strpos($file,  ").srt", $posInicial))!==false){
+						$aRenames[$diretorio.$file] = $diretorio.substr($aFilename, 0, $posInicial).$val.'.srt';
+					}
+				}
+				
+			} else if(is_dir($diretorio.$file)===true){
+				fixSubtitlesNames($diretorio.$file."/");
+			}
+		}
+		closedir($dh);
+	}
+
+	foreach($aRenames as $aOldName => $aNewName) {
+		rename($aOldName, $aNewName);
+	}
+}
+
 if(count($argv)>=2 && is_dir($argv[1])){
 	if(!chdir($argv[1])) {
 		echo "nao consegui mudar de diretorio";
@@ -111,7 +142,12 @@ if(count($argv)>=2 && is_dir($argv[1])){
 
 $gSeries = (count($argv)==3 && $argv[2]=="series");
 
+var_dump($gSeries);
+
 $diretorio=getDir();
+
+//corrige as legendas que nao estao com nome padrao ex. .pob(fulaninho).srt
+fixSubtitlesNames($diretorio);
 
 // busca arquivos prontos para criar
 $aFilesReadyToCreate = array();
