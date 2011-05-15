@@ -67,7 +67,7 @@ file_put_contents("config_creator.txt", $aFileConfig);
 $aAnswer = readline("Do you want to auto syncronize the subtitle (y/n)?");
 $aAnswer = trim($aAnswer);
 if($aAnswer == 'y' || $aAnswer == 'Y') {
-	exec("php ".dirname( $argv[0] )."\legenda.php 1 config_creator.txt", $aResultado);
+	exec("php \"".dirname( $argv[0] )."\legenda.php\" 1 config_creator.txt", $aResultado);
 	echo "your new subtitle is now ready to use. enjoy it ;)\n";
 	unlink("config_creator.txt");
 }
