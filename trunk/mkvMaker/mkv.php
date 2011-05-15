@@ -23,6 +23,14 @@ function getDir() {
 	return $retorno;
 }
 
+function capitalize($newFilename) {
+	$newFilename = str_replace ( ".", ". ", $newFilename);
+	
+	$newFilename = preg_replace('/(.*)(\d)e(\d)(.*)/', '\1\2E\3\4', $newFilename);
+	$newFilename = ucwords ($newFilename);
+	$newFilename = str_replace ( ". ", ".", $newFilename);
+	return $newFilename;
+}
 
 function criaComandosExecucao($aFilesReadyToCreate) {
 	global $aTraducaoLang;
@@ -48,8 +56,10 @@ function criaComandosExecucao($aFilesReadyToCreate) {
 		$basedir = substr($newFilename, 0, $pos+1);
 		$newFilename = substr($newFilename,$pos+1, strlen($newFilename));
 
+		$newFilename = capitalize($newFilename);
+		
 		if($gSeries) {
-			$pattern = '|^(.*)([0-9][0-9])\.(.*)\.(.*)|';
+			$pattern = '|^(.*)(E[0-9][0-9])\.(.*)\.(.*)|';
 			$replacement = '$1$2.$4';
 			$newFilename = preg_replace($pattern, $replacement, $newFilename);
 		}
@@ -141,8 +151,6 @@ if(count($argv)>=2 && is_dir($argv[1])){
 }
 
 $gSeries = (count($argv)==3 && $argv[2]=="series");
-
-var_dump($gSeries);
 
 $diretorio=getDir();
 
